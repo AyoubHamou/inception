@@ -5,7 +5,7 @@ services:
     image: mariadb
     env_file: .env
     networks:
-      - incep-network
+      - inception
     volumes:
       - mariadb:/var/lib/mysql
     restart: always
@@ -17,20 +17,20 @@ services:
     volumes:
       - wordpress:/var/www/html
     networks:
-      - incep-network
+      - inception
     depends_on:
       - mariadb
     restart: always
   nginx:
     container_name: nginx
     image: nginx
-    build: ./requirements/ngnix
+    build: ./requirements/nginx
     env_file: .env
     ports:
       - target: 443
         published: 443
     networks:
-      - incep-network
+      - inception
     volumes:
       - wordpress:/var/www/html
     depends_on:
@@ -38,17 +38,18 @@ services:
     restart: always
 
 networks:
-  incep-network:
-    name: incep-network
-    driver: bridge
+  inception:
+    name: inception
 volumes:
   wordpress:
+    name: wordpress
     driver: local
     driver_opts:
       type: none
       o : bind
       device: /home/ahamou/data/wordpress
   mariadb:
+    name: mariadb
     driver: local
     driver_opts:
       type: none
